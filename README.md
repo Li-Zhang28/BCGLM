@@ -8,4 +8,9 @@ Please download the packge to your computer and put it in a workpath that your R
 This package includes 2 folders: Continuous and Binary. We introduce each of these as follows.
 
 # Continuous
-Within this folder, "simulation" includes the code for data simulation.
+In this directory, you will find three main subfolders: "simulation" and "analysis".
+- The "simulation" folder contains the code for data simulation, allowing you to generate synthetic data for testing and validation purposes.
+
+- The "analysis" folder contains the analysis code for our proposed method BGLMC (Bayesian Generalized Linear Models with Constraints) specifically designed for continuous response data. This code includes implementations of three different Bayesian methods with distinct prior distributions: hierarchical Normal prior, hierarchical double-exponential prior, and regularized horseshoe prior.
+
+
