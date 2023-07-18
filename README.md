@@ -11,7 +11,7 @@ This package includes 2 folders: Continuous and Binary. We introduce each of the
 In this directory, you will find two main files: "simulation" and "analysis".
 - The "simulation" file contains the code for data simulation, allowing you to generate synthetic data for testing and validation purposes.
 
-- The "analysis" file contains the analysis code for our proposed method BGLMC (Bayesian Generalized Linear Models with Constraints) specifically designed for continuous response data. This code includes implementations of three different Bayesian methods with distinct prior distributions: hierarchical Normal prior, hierarchical double-exponential prior, and regularized horseshoe prior.
+- The "analysis" file contains the analysis code for our proposed method BGLMC (Bayesian Generalized Linear Models with Constraints) specifically designed for continuous response data. 
 
 # Binary
 In this directory, you will find three main subfolders: "simulation", "analysis" and "data".
