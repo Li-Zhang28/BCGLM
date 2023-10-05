@@ -1,5 +1,4 @@
 # BCGLM
-Develop
 BCGLM (Bayesian compositional generalized linear models for analyzing microbiome data) was developed to address the challenges of analyzing compositional microbiome data, and it incorporates a sum-to-zero constraint on the coefficients. This package provides simulation code and analysis code for both continuous and binary outcomes.
 
 # Installation
