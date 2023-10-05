@@ -10,12 +10,12 @@ This package includes 2 folders: Continuous and Binary. We introduce each of the
 In this directory, you will find two main files: "simulation" and "analysis".
 - The "simulation" file contains the code for data simulation, allowing you to generate synthetic data for testing and validation purposes.
 
-- The "analysis" file contains the analysis code for our proposed method BGLMC (Bayesian Generalized Linear Models with Constraints) specifically designed for continuous response data. 
+- The "analysis" file contains the analysis code for our proposed method BCGLM (Bayesian compositional generalized linear models for analyzing microbiome data) specifically designed for continuous response data. 
 
 # Binary
 In this directory, you will find three main subfolders: "simulation", "analysis" and "data".
 - The "simulation" folder contains the code for binay data simulation.
 
-- The "analysis" file contains the analysis code for our proposed method BGLMC (Bayesian Generalized Linear Models with Constraints) specifically designed for binay response data.
+- The "analysis" file contains the analysis code for our proposed method BCGLM (Bayesian compositional generalized linear models for analyzing microbiome data) specifically designed for binay response data.
 
-- The "data" file contains real data.
+- The "data" file contains analysis for real data.
