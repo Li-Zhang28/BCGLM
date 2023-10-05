@@ -1,1 +1,114 @@
+h1=read.csv("IBD.csv")
+head(h1)
+ibd=h1$ibd
+dim(h1)
+h1=h1[,-1]
+h1=h1[,1:97]
+repla=min(h1[h1>0])
+#h22=h2
+# h22[,1:77][h22[,1:77]==0]=NA
+# rep=apply(h22, 1, FUN = min, na.rm = TRUE)
+# rep1=rep*0.5
+# for (i in 1:nrow(h2)){
+#   for (j in 1:77){
+#     h2[i,j][h2[i,j]==0]=rep1[i]
+#   }
+# }
+dim(h1)
+h1[,1:97][h1[,1:97]==0]=0.5*repla
+total=apply(h1, 1, sum);length(total)
+y1=h1/total
+apply(y1, 1, sum)
+y2=log(y1)
+dim(y1)
+#h2[,1:77]=log(h2[,1:77])
+dat2=data.frame(y2,ibd)
+colnames(dat2)=sub(pattern = '__', replacement ='',colnames(dat2))
 
+#####Implement our method
+library(phyloseq)
+library(brms)
+library(BhGLM)
+dist = c("bray", "jaccard", "jsd", "unifrac", "wunifrac", "dpcoa")
+m = dist[1]
+otu=otu_table(y1,taxa_are_rows = F)
+dis.taxa = distance(otu, method=m, type="taxa") 
+dis.taxa = as.matrix(dis.taxa); dim(dis.taxa)
+
+simi.mat <- function(dis.mat)
+{
+  n <- ncol(dis.mat)
+  D2 <- dis.mat^2
+  I <- diag(1, n)
+  II <- array(1, c(n,n))
+  K <- -0.5 * (I - II/n) %*% D2 %*% (I - II/n)
+  # to ensure a positive semi-definite matrix
+  # method 1
+  ev <- eigen(K)
+  v <- ev$vectors
+  e <- abs(ev$values)
+  K <- v %*% diag(e) %*% t(v)
+  K
+}
+
+K.taxa = simi.mat(dis.taxa); dim(K.taxa)
+
+taxa = as.numeric(K.taxa)
+node1 = node2 = w = NULL
+for (i in 1:(ncol(K.taxa)-1))
+  for (j in (i+1):ncol(K.taxa))
+  {
+    if(abs(K.taxa[i,j]) > 0.28)
+    {
+      node1 = c(node1,i);
+      node2 = c(node2,j);
+      w = c(w, K.taxa[i,j])
+    }
+  }
+w = sqrt(abs(w)); length(w)
+
+
+RP = beta!=0
+fm = bf(y ~ ., center=T)
+
+#######
+library(BhGLM)
+
+f = mbglm(y=y1, formula = ~ ibd, 
+          family=NegBin(), prior=Student(0, 100))
+
+out = summary.mbglm(f)
+out = out[out[,2]!="(Intercept)", ]
+coefs = out[,3]; names(coefs)=out[,1]
+par(mfrow=c(1,1), cex.axis=1, mar=c(2,8,2,2))
+plot.bh(coefs=coefs, sds=out[,4], pvalues=out[,5], 
+        threshold=0.25, gap=0, show.all.vars=F)
+
+
+###Method 4
+bp5 = set_prior("horseshoe(df=3, df_global=3)", class="b")
+bp5= bp5 + set_prior("target += normal_lpdf(mean(b) | 0, 0.001)", check=F) # sensitive to the variance of mean(b)
+bp5 = bp5 + set_prior("target += -0.5*dot_self(w .* (log(hs_local[node1])-log(hs_local[node2])))", check=F)
+
+ln = length(node1)
+stanvars =stanvar(x=ln, name="ln", scode="int ln;", block="data") +
+  stanvar(x=node1, name="node1", scode="int node1[ln];", block="data") +
+  stanvar(x=node2, name="node2", scode="int node2[ln];", block="data") +
+  stanvar(x=w, name="w", scode="vector[ln] w;", block="data")
+
+fm = bf(ibd ~., center=T)
+##
+set.seed(12)
+
+f_n = brm(fm, data=dat2,family=bernoulli, prior=bp5,stanvars=stanvars, chains=2, iter=4000,
+          control = list(max_treedepth= 15,adapt_delta = 0.999))
+summary(f_n,prob=0.95)
+#
+sample2= as.matrix(f_n)
+sample2 = sample2[,2:(ncol(sample2)-2)]
+dim(sample2)
+su = apply(sample2, 1, sum); min(su); max(su);mean(su)
+
+samp=fixef(f_n)[-1,]
+PP_2 = (samp[,4]<0)|(samp[,3]>0)
+samp[PP_2,]
