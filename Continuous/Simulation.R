@@ -1,8 +1,8 @@
 library(MASS)
 library(phyloseq)
 set.seed(123)
-  n=n
-  p=snr
+  n=800
+  p=100
   gammatrue=rep(0,p)
   true_index=seq(18,40,by=2)
   gammatrue[true_index]=1
