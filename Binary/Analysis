@@ -75,3 +75,4 @@ mse4=sum((samples4[,1]-beta)^2)/p
 pred4 = predict(f4, newdata=dat2[,-1])[,1]
 a4=measure.glm(y, pred4,  family="binomial")
 
+a4
