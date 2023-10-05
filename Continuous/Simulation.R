@@ -1,5 +1,6 @@
 library(MASS)
 library(phyloseq)
+setseed(123)
   n=n
   p=snr
   gammatrue=rep(0,p)
