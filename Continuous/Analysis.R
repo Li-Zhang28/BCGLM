@@ -33,7 +33,7 @@ library(BhGLM)
   for (i in 1:(ncol(K.taxa)-1))
     for (j in (i+1):ncol(K.taxa))
     {
-      if(abs(K.taxa[i,j]) > 0.18)
+      if(abs(K.taxa[i,j]) > quantile(abs(taxa))[3])
       {
         node1 = c(node1,i);
         node2 = c(node2,j);
@@ -53,7 +53,7 @@ fm = bf(y ~ ., center=T)
 ### prior guess for 𝑚0
 
 e1=p-12
- bp4 = set_prior("horseshoe(df=3, df_global=3,par_ratio=12/e1)", class="b")
+ bp4 = set_prior("horseshoe(df=1, df_global=1,par_ratio=12/e1)", class="b")
  bp4= bp4 + set_prior("target += normal_lpdf(mean(b) | 0, 0.001)", check=F) # sensitive to the variance of mean(b)
  bp4 = bp4 + set_prior("target += -0.5*dot_self(w .* (log(hs_local[node1])-log(hs_local[node2])))", check=F)
 
