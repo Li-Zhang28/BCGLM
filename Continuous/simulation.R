@@ -1,8 +1,7 @@
 library(MASS)
 library(phyloseq)
-  p=100
   n=n
-  snr=snr
+  p=snr
   gammatrue=rep(0,p)
   true_index=seq(18,40,by=2)
   gammatrue[true_index]=1
@@ -14,25 +13,29 @@ library(phyloseq)
   b[true_index[index1]]=b1
   b[true_index[index2]]=b2
   sigmaX=1
-  sigma=1/snr*mean(abs(c(b1,b2)))
-  sigma1=rep(1,p)%*%t(1:p)
-  sigma2=abs(sigma1-t(sigma1))
-  sigma3=0.2^sigma2
-  
+  #sigma=1/snr*mean(abs(c(b1,b2)))
+  xcor=matrix(0,p,p)
+  for (i in seq(18,38,by=2)){
+    for (j in seq(i+2,40,by=2)){
+      xcor[i,j]=0.75-0.015*abs(i-j)
+    }
+  }
+  Xcor=xcor+t(xcor)+diag(p)
   theta=rep(0,p)
   theta[true_index]=log(0.5*p)
   beta=gammatrue*b
-  X=mvrnorm(n,theta,sigma3)
+  s=diag(p)*sigmaX
+  X=mvrnorm(n,theta,s%*%Xcor%*%s)
   x=exp(X)
   x1 = x/rowSums(x)
   x2=log(x1)
-  epsilon=rnorm(n,0,sigma)
+  epsilon=rnorm(n,0,1.6)
   y=x2%*%beta+epsilon
   dat=data.frame(y,x2)
   q=n/2
-  m=q+1
+  q1=q+1
  dat1=dat[1:q,]
- dat2=dat[m:n,]
+ dat2=dat[q1:n,]
  dim(dat1);dim(dat2)
 
 
