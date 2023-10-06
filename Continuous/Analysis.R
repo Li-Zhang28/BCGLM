@@ -75,7 +75,7 @@ FN4 = sum(PP4=="FALSE"&RP=="TRUE")
 TN4 = sum(PP4=="FALSE"&RP=="FALSE")
 
 mse4=sum((samples4[,1]-beta)^2)/p
-
+FP4;FN4;mse4
 
 y=dat2$y
 pred4 = predict(f4, newdata=dat2[,-1])[,1]
