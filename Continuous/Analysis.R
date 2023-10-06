@@ -33,7 +33,7 @@ library(BhGLM)
   for (i in 1:(ncol(K.taxa)-1))
     for (j in (i+1):ncol(K.taxa))
     {
-      if(abs(K.taxa[i,j]) >0.18 ) ##quantile(abs(taxa))[3]
+      if(abs(K.taxa[i,j]) > 0.18) ##quantile(abs(taxa))[3]
       {
         node1 = c(node1,i);
         node2 = c(node2,j);
