@@ -63,7 +63,7 @@ e1=p-12
   stanvar(x=node2, name="node2", scode="int node2[ln];", block="data") +
   stanvar(x=w, name="w", scode="vector[ln] w;", block="data") 
 
-f4= brm(fm, data=dat1, family=gaussian(), prior=bp4, stanvars=stanvars,control = list(adapt_delta = 0.9999,max_treedepth= 20),
+f4= brm(fm, data=dat1, family=gaussian(), prior=bp4, stanvars=stanvars,control = list(adapt_delta = 0.95,max_treedepth= 15),
         chains=4, iter=4000)
 samples4 = fixef(f4)
 samples4=samples4[-1,]
