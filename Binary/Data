@@ -103,11 +103,6 @@ set.seed(12)
 f_n = brm(fm, data=dat2,family=bernoulli, prior=bp5,stanvars=stanvars, chains=2, iter=4000,
           control = list(max_treedepth= 15,adapt_delta = 0.999))
 summary(f_n,prob=0.95)
-#
-sample2= as.matrix(f_n)
-sample2 = sample2[,2:(ncol(sample2)-2)]
-dim(sample2)
-su = apply(sample2, 1, sum); min(su); max(su);mean(su)
 
 samp=fixef(f_n)[-1,]
 PP_2 = (samp[,4]<0)|(samp[,3]>0)
