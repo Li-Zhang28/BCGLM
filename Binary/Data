@@ -107,3 +107,6 @@ summary(f_n,prob=0.95)
 samp=fixef(f_n)[-1,]
 PP_2 = (samp[,4]<0)|(samp[,3]>0)
 samp[PP_2,]
+
+ploo1 = loo_predict(f_n)
+measure.glm(dat2$ibd, ploo1, family="binomial")
